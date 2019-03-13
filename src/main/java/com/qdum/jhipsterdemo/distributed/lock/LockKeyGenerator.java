@@ -5,6 +5,8 @@ import com.qdum.jhipsterdemo.distributed.lock.annotation.CacheLock;
 import com.qdum.jhipsterdemo.distributed.lock.annotation.CacheParam;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -21,6 +23,9 @@ import java.lang.reflect.Parameter;
  */
 @Configuration
 public class LockKeyGenerator implements CacheKeyGenerator {
+
+    private static Logger logger = LoggerFactory.getLogger(LockKeyGenerator.class);
+
     @Override
     public String getLockKey(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
@@ -29,6 +34,7 @@ public class LockKeyGenerator implements CacheKeyGenerator {
         final Object[] args = pjp.getArgs();
         final Parameter[] parameters = method.getParameters();
         StringBuilder builder = new StringBuilder();
+        // 下面注释的方法是将方法参数中 所有带有 cacheParam 的参数拼合成一个key
         for (int i = 0; i < parameters.length; i++) {
             // 获取参数中带有 cacheParam 注解的
             final CacheParam annotation = parameters[i].getAnnotation(CacheParam.class);
@@ -52,7 +58,7 @@ public class LockKeyGenerator implements CacheKeyGenerator {
                 }
             }
         }
-        System.out.println("生成的分布式key为：" + lockAnnotation.prefix() + builder.toString());
+        logger.debug("生成的分布式key为：{}", lockAnnotation.prefix() + builder.toString());
         return lockAnnotation.prefix() + builder.toString();
     }
 }

@@ -110,7 +110,6 @@ public class RedisLockHelper {
         RedisScript<Long> scriptUnlock = new DefaultRedisScript<Long>(script, Long.class);
         Long result = stringRedisTemplate.execute(scriptUnlock, stringRedisTemplate.getStringSerializer(), (RedisSerializer<Long>) stringRedisTemplate.getDefaultSerializer()
                 , Collections.singletonList(lockKey), value);
-        System.out.println("unlock的结果： " + result);
         if (Long.valueOf(1).equals(result)) {
             return true;
         } else {

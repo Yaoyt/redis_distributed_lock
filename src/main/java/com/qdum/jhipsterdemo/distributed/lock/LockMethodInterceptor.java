@@ -59,9 +59,10 @@ public class LockMethodInterceptor {
                     Thread.sleep(100);
                 }
             }
-            return null;
+            throw new RuntimeException("获取锁失败");
         } catch (Exception e) {
-            throw new RuntimeException("系统异常");
+            e.printStackTrace();
+            throw new RuntimeException("获取锁失败");
         } finally {
             // TODO 如果演示的话需要注释该代码;实际应该放开
             redisLockHelper.unlock2(lockKey, value);

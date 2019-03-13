@@ -30,7 +30,7 @@ public class BookController {
 
     @GetMapping("/count")
     public String count() {
-        bookService.count("1111111");
+        bookService.count("1111111","suibian");
         return "";
     }
 }

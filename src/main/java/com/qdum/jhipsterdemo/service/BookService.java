@@ -19,7 +19,7 @@ public class BookService {
     private StringRedisTemplate stringRedisTemplate;
 
     @CacheLock(prefix = "counts")
-    public void count(@CacheParam(name = "subKey") String subKey) {
+    public void count(@CacheParam(name = "subKey") String subKey, String key2) {
         String ct = stringRedisTemplate.opsForValue().get("ct");
         if (StringUtils.isEmpty(ct)) {
             ct = "0";
